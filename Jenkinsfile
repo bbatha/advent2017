@@ -1,5 +1,7 @@
 pipeline {
-  agent 'rust'
+  agent {
+    label 'rust'
+  }
 
   stages {
     stage('Initialize') {
@@ -20,11 +22,11 @@ pipeline {
       steps {
         sh 'cargo build --release'
       }
-    }
 
-    post {
-      success {
-        archiveArtifacts artifacts: 'target/release/day*', fingerprint: true
+      post {
+        success {
+          archiveArtifacts artifacts: 'target/release/day*', fingerprint: true
+        }
       }
     }
   }
