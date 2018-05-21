@@ -9,12 +9,20 @@ pipeline {
         sh '''
           echo "PATH = ${PATH}"
         '''
+
+        sh 'cargo install --git https://github.com/DSRCorporation/cargo-test-xunit'
       }
     }
 
     stage('Test') {
       steps {
-        sh 'cargo test'
+        sh 'cargo test-xunit'
+      }
+
+      post {
+        always {
+          junit 'test-results.xml'
+        }
       }
     }
 
@@ -25,7 +33,7 @@ pipeline {
 
       post {
         success {
-          archiveArtifacts artifacts: 'target/release/day*', fingerprint: true
+          archiveArtifacts artifacts: 'target/release/day*', excludes: 'target/release/day*.d', fingerprint: true
         }
       }
     }
