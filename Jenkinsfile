@@ -20,10 +20,10 @@ pipeline {
     }
 
     stage('Test') {
-      matrix ['1.24', '1.25', '1.26'], {
+      matrix(['1.24', '1.25', '1.26'], {
         unstash name: 'test-xunit'
         sh './cargo-test-xunit'
-      }
+      })
     }
 
     stage('Build') {
