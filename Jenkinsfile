@@ -1,10 +1,10 @@
 pipeline {
-  stages {
-    agent docker {
-       image 'rust:1.26'
-       label 'docker'
-    }
+  agent docker {
+     image 'rust:1.26'
+     label 'docker'
+  }
 
+  stages {
     stage('Initialize') {
       steps {
         sh '''
