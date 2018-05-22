@@ -15,7 +15,7 @@ pipeline {
           echo "PATH = ${PATH}"
         '''
         sh 'cargo install --git https://github.com/DSRCorporation/cargo-test-xunit --root target/release/.'
-        stash name: 'test-xunit', includes: 'target/release/cargo-test-xunit'
+        stash name: 'test-xunit', includes: 'target/release/bin/cargo-test-xunit'
       }
     }
 
