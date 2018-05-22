@@ -1,3 +1,5 @@
+@Library('matrix')
+
 pipeline {
   agent {
     docker {
@@ -12,20 +14,15 @@ pipeline {
         sh '''
           echo "PATH = ${PATH}"
         '''
-        sh 'cargo install --git https://github.com/DSRCorporation/cargo-test-xunit'
-        stash name: 'test-xunit', includes: '~/.cargo/bin/cargo-test-xunit'
+        sh 'cargo install --git https://github.com/DSRCorporation/cargo-test-xunit --root target/release/.'
+        stash name: 'test-xunit', includes: 'target/release/cargo-test-xunit'
       }
     }
 
     stage('Test') {
-      steps {
+      matrix ['1.24', '1.25', '1.26'], {
         unstash name: 'test-xunit'
         sh './cargo-test-xunit'
-      }
-      post {
-         always {
-            junit 'test-results.xml'
-         }
       }
     }
 
