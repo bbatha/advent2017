@@ -3,7 +3,7 @@
 pipeline {
   agent {
     docker {
-      image 'rust:1.26'
+      image 'rust:1.26-slim'
       label 'docker'
     }
   }
@@ -21,7 +21,7 @@ pipeline {
 
     stage('Test') {
       steps {
-        matrix(['1.24', '1.25', '1.26'], {
+        matrix(['1.24-slim', '1.25-slim', '1.26-slim'], {
           unstash name: 'test-xunit'
           sh './cargo-test-xunit'
         })
