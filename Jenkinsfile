@@ -1,15 +1,17 @@
 @Library('matrix') _
 
 pipeline {
-  agent {
-    docker {
-      image 'rust:1.26-slim'
-      label 'docker'
-    }
-  }
+  agent none
 
   stages {
     stage('Initialize') {
+      agent {
+        docker {
+          image 'rust:1.26-slim'
+          label 'docker'
+        }
+      }
+
       steps {
         sh '''
           echo "PATH = ${PATH}"
@@ -20,6 +22,8 @@ pipeline {
     }
 
     stage('Test') {
+      agent { label 'docker' };
+
       steps {
         matrix(['1.24-slim', '1.25-slim', '1.26-slim'], {
           unstash name: 'test-xunit'
@@ -29,6 +33,13 @@ pipeline {
     }
 
     stage('Build') {
+      agent {
+        docker {
+          image 'rust:1.26-slim'
+          label 'docker'
+        }
+      }
+
       steps {
         sh 'cargo build --release'
       }
