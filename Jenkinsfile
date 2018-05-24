@@ -16,8 +16,8 @@ pipeline {
         sh '''
           echo "PATH = ${PATH}"
         '''
-        //sh 'cargo install --git https://github.com/DSRCorporation/cargo-test-xunit --root target/release/.'
-        //stash name: 'test-xunit', includes: 'target/release/bin/cargo-test-xunit'
+        sh 'cargo install --git https://github.com/DSRCorporation/cargo-test-xunit --root target/release/.'
+        stash name: 'test-xunit', includes: 'target/release/bin/cargo-test-xunit'
       }
     }
 
@@ -26,9 +26,8 @@ pipeline {
 
       steps {
         matrix(['rust:1.26-slim-stretch', 'rust:1.26-slim'], {
-          //unstash name: 'test-xunit'
-          //sh './target/release/bin/cargo-test-xunit'
-          sh 'cargo test'
+          unstash name: 'test-xunit'
+          sh './target/release/bin/cargo-test-xunit'
         })
       }
     }
